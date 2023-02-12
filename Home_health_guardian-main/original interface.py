@@ -10,7 +10,7 @@ import webbrowser
 ws = Tk()
 ws.title('try_btn')
 new = 1
-url = 'https://www.canva.com/design/DAE7Y9mhbWI/PBOKmoB1WWus2jsTu12KWA/view?utm_content=DAE7Y9mhbWI&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton'
+url = 'https://www.canva.com/design/DAE96422PBY/b5B4jYTZuhMZzg6pt2Bq9w/view?utm_content=DAE96422PBY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton'
 ws.geometry('354x633')
 
 bg = PhotoImage(file = "canuseinterface.PNG")
@@ -45,7 +45,7 @@ btn_canvas = canvas.create_window(72,360,anchor="nw",window=recipe_btn)
 ########nutrients######
 
 nutrient_btn = Button(ws,text='    ',bg ="#F0657A" ,command=nutrients,width=6,height=2,borderwidth=0,font=('arial', 18))
-btn_canvas = canvas.create_window(240,360,anchor="nw",window=nutrient_btn)
+btn_canvas = canvas.create_window(240,356,anchor="nw",window=nutrient_btn)
 ########nutrients######
 
 ##########sport######
@@ -60,9 +60,8 @@ btn_canvas = canvas.create_window(72,498,anchor="nw",window=sport_btn)
 ##########sport######
 #########project link####################
 project_link_btn = Button(ws,text='    ',bg ="#86DDFF" ,command=openbrowser,width=6,height=2,borderwidth=0,font=('arial', 18))
-btn_canvas = canvas.create_window(240,498,anchor="nw",window=project_link_btn)
+btn_canvas = canvas.create_window(240,496,anchor="nw",window=project_link_btn)
 #########project link####################
-
 
 
 

@@ -1,8 +1,9 @@
 import requests
 import sqlite3 as sql
-import json
+import subprocess
 import urllib
 from random import randint
+import time
 
 FILENAME = "test_recipe_03.db"
 con = sql.connect(FILENAME)
@@ -62,6 +63,7 @@ def query_recipes():
             success = True
         else:
             print(f'0 results for "{key_word}"')
+            subprocess.call(["python", "register.py"])
             input("")
     index = display_recipe_labels(data, index)
     print(f"   Select Recipe # (1-{index})\n   (enter 'm' to see more)")
@@ -262,7 +264,10 @@ def display_recipe_dict(curr_recipe):
     print()
     print(f"Directions: {curr_recipe['url']}")
     print("====================================================")
+    time.sleep(5)
+    subprocess.call(["python", "original interface.py"])
     input()
+
 
 
 """
@@ -320,13 +325,3 @@ def get_url_r(uri):
 
 main()
 
-# Uncomment for development assistance.
-
-# def display_keys(recipe):
-#     """
-#     Used for development: traversing json data and dictionaries
-#     """
-#     for i in recipe:
-#         print(i)
-#         input()
-    

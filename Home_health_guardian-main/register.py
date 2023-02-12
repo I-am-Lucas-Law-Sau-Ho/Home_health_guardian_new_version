@@ -1,21 +1,19 @@
+import subprocess
 from tkinter import *
+
 import cv2
 import mediapipe as mp
 import numpy as np
-from tkinter import messagebox
 from matplotlib import pyplot as plt
 
-try:
-    import Tkinter as tk
-except:
-    import tkinter as tk
 root = Tk()
 root.configure(bg="yellow")
 
 root.geometry('400x400')
 
-#just which cam is used to set Q
+# just which cam is used to set Q
 Q = 0
+
 
 def reset_entry():
     age_tf.delete(0, 'end')
@@ -40,7 +38,7 @@ def bmi_index(bmi):
     elif (bmi > 24.9) and (bmi < 29.9):
         messagebox.showinfo('bmi-pythonguides',
                             f'BMI = {bmi} is Overweight we recommand you choose eat healthily and hard mode')
-    elif (bmi > 29.9):
+    elif bmi > 29.9:
         messagebox.showinfo('bmi-pythonguides',
                             f'BMI = {bmi} is Obesity we recommand you choose eat healthily and hard mode')
     else:
@@ -56,11 +54,9 @@ frame.pack(expand=True)
 def labeler(e):
     age_lb.config(text="Your height is " + age_lb.get(1.0, END + "-1c") + e.char + " m")
 
+
 #######nomove###########nomove###############nomove###############nomove###############nomove#############nomove###############nomove##############nomove###################
-#######nomove###########nomove###############nomove###############nomove###############nomove#############nomove###############nomove##############nomove###################
-#######nomove###########nomove###############nomove###############nomove###############nomove#############nomove###############nomove##############nomove###################
-#######nomove###########nomove###############nomove###############nomove###############nomove#############nomove###############nomove##############nomove###################
-#######nomove###########nomove###############nomove###############nomove###############nomove#############nomove###############nomove##############nomove###################
+
 def nomove():
     # Initializing mediapipe pose class.
     mp_pose = mp.solutions.pose
@@ -72,7 +68,7 @@ def nomove():
     mp_drawing = mp.solutions.drawing_utils
 
     def detectPose(image, pose, display=True):
-        '''
+        """
         This function performs pose detection on an image.
         Args:
             image: The input image with a prominent person whose pose landmarks needs to be detected.
@@ -82,7 +78,7 @@ def nomove():
         Returns:
             output_image: The input image with the detected pose landmarks drawn.
             landmarks: A list of detected landmarks converted into their original scale.
-        '''
+        """
 
         # Create a copy of the input image.
         output_image = image.copy()
@@ -137,7 +133,7 @@ def nomove():
             return output_image, landmarks
 
     def calculateAngle(landmark1, landmark2, landmark3):
-        '''
+        """
         This function calculates angle between three different landmarks.
         Args:
             landmark1: The first landmark containing the x,y and z coordinates.
@@ -146,7 +142,7 @@ def nomove():
         Returns:
             angle: The calculated angle between the three landmarks.
 
-        '''
+        """
 
         # Get the required landmarks coordinates.
         x1, y1, z1 = landmark1
@@ -157,7 +153,7 @@ def nomove():
         a = [x1, y1, z1]
         b = [x2, y2, z2]
         c = [x3, y3, z3]
-        radians = np.arctan2(c[1]-b[1], c[0]-b[0]) - np.arctan2(a[1]-b[1], a[0]-b[0])
+        radians = np.arctan2(c[1] - b[1], c[0] - b[0]) - np.arctan2(a[1] - b[1], a[0] - b[0])
         angle = np.abs(radians * 180.0 / np.pi)
 
         if angle > 180.0:
@@ -171,7 +167,7 @@ def nomove():
         return angle
 
     def classifyPose(landmarks, output_image, display=False):
-        '''
+        """
         This function classifies yoga poses depending upon the angles of various body joints.
         Args:
             landmarks: A list of detected landmarks of the person whose pose needs to be classified.
@@ -182,7 +178,7 @@ def nomove():
             output_image: The image with the detected pose landmarks drawn and pose label written.
             label: The classified pose label of the person in the output_image.
 
-        '''
+        """
         image_height, image_width, _ = output_image.shape
 
         # Initialize the label of the pose. It is not known at this stage.
@@ -257,10 +253,10 @@ def nomove():
         # ----------------------------------------------------------------------------------------------------------------
 
         # Check if one leg is straight.
-        if left_knee_angle > 155 and left_knee_angle < 195 or right_knee_angle > 155 and right_knee_angle < 195:
+        if 155 < left_knee_angle < 195 or 155 < right_knee_angle < 195:
 
             # Check if the other leg is bended at the required angle.
-            if left_knee_angle > 80 and left_knee_angle < 130 or right_knee_angle > 80 and right_knee_angle < 130:
+            if 80 < left_knee_angle < 130 or 80 < right_knee_angle < 130:
                 # Specify the label of the pose that is Warrior II pose.
                 label = 'Warrior II Pose'
 
@@ -270,10 +266,10 @@ def nomove():
         # ----------------------------------------------------------------------------------------------------------------
 
         # Check if both legs are straight
-        if left_knee_angle > 160 and left_knee_angle < 180 and right_knee_angle > 160 and right_knee_angle < 180:
-            if left_hip_angle > 160 and left_hip_angle < 180 and left_hip_angle > 160 and left_hip_angle < 180:
-                if left_elbow_angle > 160 and left_elbow_angle < 180 and left_elbow_angle > 160 and left_elbow_angle < 180:
-                    if left_shoulder_angle > 75 and left_shoulder_angle < 120 and left_shoulder_angle > 75 and left_shoulder_angle < 120:
+        if 160 < left_knee_angle < 180 and 160 < right_knee_angle < 180:
+            if 160 < left_hip_angle < 180 and 160 < left_hip_angle < 180:
+                if 160 < left_elbow_angle < 180 and 160 < left_elbow_angle < 180:
+                    if 75 < left_shoulder_angle < 120 and 75 < left_shoulder_angle < 120:
                         # Specify the label of the pose that is tree pose.
                         label = 'T Pose'
 
@@ -283,10 +279,10 @@ def nomove():
         # ----------------------------------------------------------------------------------------------------------------
 
         # Check if one leg is straight
-        if left_knee_angle > 165 and left_knee_angle < 195 or right_knee_angle > 165 and right_knee_angle < 195:
+        if 165 < left_knee_angle < 195 or 165 < right_knee_angle < 195:
 
             # Check if the other leg is bended at the required angle.
-            if left_knee_angle > 25 and left_knee_angle < 45 or right_knee_angle > 25 and right_knee_angle < 45:
+            if 25 < left_knee_angle < 45 or 25 < right_knee_angle < 45:
                 # Specify the label of the pose that is tree pose.
                 label = 'Tree Pose'
 
@@ -296,13 +292,13 @@ def nomove():
         # ----------------------------------------------------------------------------------------------------------------
 
         # Check if both leg is straight
-        if left_knee_angle > 160 and left_knee_angle < 200 and right_knee_angle > 160 and right_knee_angle < 200:
+        if 160 < left_knee_angle < 200 and 160 < right_knee_angle < 200:
 
             # Check if the body is bended at the required angle.
-            if left_hip_angle > 60 and left_hip_angle < 120 and right_hip_angle > 60 and right_hip_angle < 120:
+            if 60 < left_hip_angle < 120 and 60 < right_hip_angle < 120:
 
                 # check if it is like a downward u shape
-                if left_shoulder_angle > 75 and left_shoulder_angle < 120 and right_shoulder_angle > 75 and right_shoulder_angle < 120:
+                if 75 < left_shoulder_angle < 120 and 75 < right_shoulder_angle < 120:
                     # Specify the label of the pose that is tree pose.
                     label = 'Touch the ground'
 
@@ -399,19 +395,15 @@ def nomove():
         k = cv2.waitKey(1) & 0xFF
 
         # Check if 'ESC' is pressed.
-        if (k == 27):
+        if k == 27:
             # Break the loop.
             break
 
     # Release the VideoCapture object and close the windows.
     camera_video.release()
     cv2.destroyAllWindows()
-#######nomove###########nomove###############nomove###############nomove###############nomove#############nomove###############nomove##############nomove###################
-#######nomove###########nomove###############nomove###############nomove###############nomove#############nomove###############nomove##############nomove###################
-#######nomove###########nomove###############nomove###############nomove###############nomove#############nomove###############nomove##############nomove###################
 
-####situp#########situp###########situp############situp############situp############situp####situp#####situp##############situp##########situp#############
-####situp#########situp###########situp############situp############situp############situp####situp#####situp##############situp##########situp#############
+
 ####situp#########situp###########situp############situp############situp############situp####situp#####situp##############situp##########situp#############
 def situpcmd():
     import cv2
@@ -420,7 +412,6 @@ def situpcmd():
 
     mp_drawing = mp.solutions.drawing_utils
     mp_pose = mp.solutions.pose
-
 
     def calculate_angle(a, b, c):
         a = np.array(a)  # First
@@ -435,15 +426,14 @@ def situpcmd():
 
         return angle
 
-
-    cap = cv2.VideoCapture(Q,cv2.CAP_DSHOW)
+    cap = cv2.VideoCapture(Q, cv2.CAP_DSHOW)
     cv2.namedWindow('Mediapipe Feed', cv2.WINDOW_NORMAL)
 
     # Curl counter variables
     counter = 0
     stage = None
 
-    ## Setup mediapipe instance
+    # Setup mediapipe instance
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
         while cap.isOpened():
             ret, frame = cap.read()
@@ -460,63 +450,52 @@ def situpcmd():
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
             # Extract landmarks
-            try:
-                landmarks = results.pose_landmarks.landmark
+            landmarks = results.pose_landmarks.landmark
+            # Get coordinates
+            left_shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,
+                             landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
+            left_hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,
+                        landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
+            left_knee = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x,
+                         landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y]
+            left_ankle = [landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].x,
+                          landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].y]
 
-                # Get coordinates
-                left_shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,
-                                 landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
-                left_hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,
-                            landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
-                left_knee = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x,
-                             landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y]
-                left_ankle = [landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].x,
-                              landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].y]
-
-                right_shoulder = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,
-                                  landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
-                right_hip = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,
-                             landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
-                right_knee = [landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].x,
-                              landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].y]
-                right_ankle = [landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].x,
-                               landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].y]
-
-                # Calculate angle
-                left_hip_angle = calculate_angle(left_shoulder, left_hip, left_knee)
-                right_hip_angle = calculate_angle(right_shoulder, right_hip, right_knee)
-                right_knee_angle = calculate_angle(right_hip, right_knee, right_ankle)
-                left_knee_angle = calculate_angle(left_hip, left_knee, left_ankle)
-                if left_hip_angle > 180:
-                    left_hip_angle = 360 - left_hip_angle
-                if right_hip_angle > 180:
-                    right_hip_angle = 360 - right_hip_angle
-                if right_knee_angle > 180:
-                    right_knee_angle = 360 - right_knee_angle
-                if left_knee_angle > 180:
-                    left_knee_angle = 360 - left_knee_angle
-
-                try:
-                    Calories = counter * kg /100
-                except:
-                    Calories = counter * 0.48
-
-                # Curl counter logic
-                if ((right_knee_angle and left_knee_angle) < 90):
-                    if ((left_hip_angle and right_hip_angle) > 85):
-                        stage = "up"
-                    if ((left_hip_angle and right_hip_angle) < 30) and stage == 'up':
-                        stage = "down"
-                        counter += 1
-                        print(counter)
-                        ''''
-                if (angle-right_angle>30) or (right_angle-angle>30):
-                    cv2.putText(image, 'Very dangerous', (image_height+20,image_width-12), 
-                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 1, cv2.LINE_AA)
-    '''
-
-            except:
-                pass
+            right_shoulder = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,
+                              landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
+            right_hip = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,
+                         landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
+            right_knee = [landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].x,
+                          landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].y]
+            right_ankle = [landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].x,
+                           landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].y]
+            # Calculate angle
+            left_hip_angle = calculate_angle(left_shoulder, left_hip, left_knee)
+            right_hip_angle = calculate_angle(right_shoulder, right_hip, right_knee)
+            right_knee_angle = calculate_angle(right_hip, right_knee, right_ankle)
+            left_knee_angle = calculate_angle(left_hip, left_knee, left_ankle)
+            if left_hip_angle > 180:
+                left_hip_angle = 360 - left_hip_angle
+            if right_hip_angle > 180:
+                right_hip_angle = 360 - right_hip_angle
+            if right_knee_angle > 180:
+                right_knee_angle = 360 - right_knee_angle
+            if left_knee_angle > 180:
+                left_knee_angle = 360 - left_knee_angle
+            # calories = counter * 0.48
+            # Curl counter logic
+            if (right_knee_angle and left_knee_angle) < 90:
+                if (left_hip_angle and right_hip_angle) > 85:
+                    stage = "up"
+                if ((left_hip_angle and right_hip_angle) < 30) and stage == 'up':
+                    stage = "down"
+                    counter += 1
+                    print(counter)
+                    '''
+            if (angle-right_angle>30) or (right_angle-angle>30):
+                cv2.putText(image, 'Very dangerous', (image_height+20,image_width-12), 
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 1, cv2.LINE_AA)
+'''
 
             # Render curl counter
             # Setup status box
@@ -536,10 +515,7 @@ def situpcmd():
                         (60, 60),
                         cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv2.LINE_AA)
 
-            try:
-                calories = counter * kg  /150
-            except:
-                calories = counter * 47 / 100
+            calories = counter * 47 / 100
             cv2.putText(image, 'Calories', (250, 12),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
             cv2.putText(image, str(calories),
@@ -558,20 +534,18 @@ def situpcmd():
             k = cv2.waitKey(1) & 0xFF
 
             # Check if 'ESC' is pressed.
-            if (k == 27):
+            if k == 27:
                 # Break the loop.
                 break
 
         cap.release()
         cv2.destroyAllWindows()
 
-########situp########situp###############situp############situp##########situp###########situp#########situp####situp#######situp##############situp###################
-########situp########situp###############situp############situp##########situp###########situp#########situp####situp#######situp##############situp###################
-########situp########situp###############situp############situp##########situp###########situp#########situp####situp#######situp##############situp###################
+
+# #######situp########situp###############situp############situp##########situp###########situp#########situp
 
 #########ling##########ling##########ling##############ling###########ling############ling###########ling##########ling#####################
-#########ling##########ling##########ling##############ling###########ling############ling###########ling##########ling#####################
-#########ling##########ling##########ling##############ling###########ling############ling###########ling##########ling#####################
+
 def Alin():
     mp_drawing = mp.solutions.drawing_utils
     mp_pose = mp.solutions.pose
@@ -589,7 +563,7 @@ def Alin():
 
         return angle
 
-    cap = cv2.VideoCapture(Q,cv2.CAP_DSHOW)
+    cap = cv2.VideoCapture(Q, cv2.CAP_DSHOW)
     cv2.namedWindow('Mediapipe Feed', cv2.WINDOW_NORMAL)
 
     # Curl counter variables
@@ -597,7 +571,7 @@ def Alin():
     stage = None
     left_stage = None
     right_stage = None
-    ## Setup mediapipe instance
+    # Setup mediapipe instance
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
         while cap.isOpened():
             ret, frame = cap.read()
@@ -693,19 +667,20 @@ def Alin():
             k = cv2.waitKey(1) & 0xFF
 
             # Check if 'ESC' is pressed.
-            if (k == 27):
+            if k == 27:
                 # Break the loop.
                 break
 
         cap.release()
         cv2.destroyAllWindows()
-######ling##########ling#######################ling#################lingling########################ling#####ling####
-######ling##########ling#######################ling#################lingling########################ling#####ling####
+
+
 ######ling##########ling#######################ling#################lingling########################ling#####ling####
 
-########push#################push##################push################push###########push################push#############push########
-########push#################push##################push################push###########push################push#############push########
-########push#################push##################push################push###########push################push#############push########
+
+########push#################push##################push################push###########push################push
+
+
 def pup():
     mp_drawing = mp.solutions.drawing_utils
     mp_pose = mp.solutions.pose
@@ -723,14 +698,14 @@ def pup():
 
         return angle
 
-    cap = cv2.VideoCapture(Q,cv2.CAP_DSHOW)
+    cap = cv2.VideoCapture(Q, cv2.CAP_DSHOW)
     cv2.namedWindow('Mediapipe Feed', cv2.WINDOW_NORMAL)
 
     # Curl counter variables
     counter = 0
     stage = None
 
-    ## Setup mediapipe instance
+    # Setup mediapipe instance
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
         while cap.isOpened():
             ret, frame = cap.read()
@@ -738,7 +713,7 @@ def pup():
             # Recolor image to RGB
             image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             image.flags.writeable = False
-            #image_height, image_width, _ = image
+            # image_height, image_width, _ = image
             # Make detection
             results = pose.process(image)
 
@@ -746,7 +721,7 @@ def pup():
             image.flags.writeable = True
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
             try:
-                image_height,image_width,_ = image
+                image_height, image_width, _ = image
             except:
                 pass
 
@@ -786,9 +761,9 @@ def pup():
             '''
 
                 # Curl counter logic
-                if ((right_angle) > 145):
+                if right_angle > 145:
                     stage = "down"
-                if ((right_angle) < 115) and stage == 'down':
+                if (right_angle < 115) and stage == 'down':
                     stage = "up"
                     counter += 1
                     print(counter)
@@ -799,11 +774,7 @@ def pup():
             except:
                 pass
 
-
-            try:
-                calories = counter * kg /200
-            except:
-                calories = counter * 57 / 200
+            calories = counter * 57 / 200
             # Render curl counter
             # Setup status box
             cv2.rectangle(image, (0, 0), (400, 73), (245, 117, 16), -1)
@@ -825,10 +796,7 @@ def pup():
             # calories
             # ---------------------------------------------------------------------------#
 
-            try:
-                calories = counter * kg / 200
-            except:
-                calories = counter * 57 / 200
+            calories = counter * 57 / 200
             cv2.putText(image, 'Calories', (250, 12),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
             cv2.putText(image, str(calories),
@@ -846,7 +814,7 @@ def pup():
             k = cv2.waitKey(1) & 0xFF
 
             # Check if 'ESC' is pressed.
-            if (k == 27):
+            if k == 27:
                 # Break the loop.
                 break
 
@@ -855,13 +823,11 @@ def pup():
 
 
 ######push######push######push######push######push######push######push######push######push######push######push######push
-######push######push######push######push######push######push######push######push######push######push######push######push
-######push######push######push######push######push######push######push######push######push######push######push######push
 
 
-######squart###########squart################squart###############squart############squart###########squart##########squart######squart#################
-######squart###########squart################squart###############squart############squart###########squart##########squart######squart#################
-######squart###########squart################squart###############squart############squart###########squart##########squart######squart#################
+#####squart###########squart################squart###############squart############squart###########squart
+
+
 def square():
     mp_drawing = mp.solutions.drawing_utils
     mp_pose = mp.solutions.pose
@@ -879,13 +845,13 @@ def square():
 
         return angle
 
-    cap = cv2.VideoCapture(Q,cv2.CAP_DSHOW)
+    cap = cv2.VideoCapture(Q, cv2.CAP_DSHOW)
     cv2.namedWindow('Mediapipe Feed', cv2.WINDOW_NORMAL)
     # Curl counter variables
     counter = 0
     stage = None
 
-    ## Setup mediapipe instance
+    # Setup mediapipe instance
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
         while cap.isOpened():
             ret, frame = cap.read()
@@ -893,7 +859,7 @@ def square():
             # Recolor image to RGB
             image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             image.flags.writeable = False
-            #image_height, image_width, _ = image
+            # image_height, image_width, _ = image
             # Make detection
             results = pose.process(image)
 
@@ -939,20 +905,20 @@ def square():
                     left_knee_angle = 360 - left_knee_angle
 
                 # Curl counter logic
-                if ((left_hip_angle and right_hip_angle and right_knee_angle and left_knee_angle) > 160):
+                if (left_hip_angle and right_hip_angle and right_knee_angle and left_knee_angle) > 160:
                     stage = "down"
                 if ((
-                            left_hip_angle and right_hip_angle and right_knee_angle and left_knee_angle) < 110) and stage == 'down':
-                    if ((left_hip_angle and right_hip_angle and right_knee_angle and left_knee_angle) > 75):
+                            left_hip_angle and right_hip_angle and right_knee_angle and left_knee_angle) < 110) and \
+                        stage == 'down':
+                    if (left_hip_angle and right_hip_angle and right_knee_angle and left_knee_angle) > 75:
                         stage = "up"
                         counter += 1
                         print(counter)
-                        ''''
+                        '''
                 if (angle-right_angle>30) or (right_angle-angle>30):
                     cv2.putText(image, 'Very dangerous', (image_height+20,image_width-12), 
                         cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 1, cv2.LINE_AA)
     '''
-
             except:
                 pass
 
@@ -976,10 +942,8 @@ def square():
 
             # calories
             # ---------------------------------------------------------------------------#
-            try:
-                calories = 3.5 * kg / 400 *counter
-            except:
-                calories = counter * 8 / 25
+
+            calories = counter * 8 / 25
             cv2.putText(image, 'Calories', (250, 12),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
             cv2.putText(image, str(calories),
@@ -998,19 +962,23 @@ def square():
             k = cv2.waitKey(1) & 0xFF
 
             # Check if 'ESC' is pressed.
-            if (k == 27):
+            if k == 27:
                 # Break the loop.
                 break
 
         cap.release()
         cv2.destroyAllWindows()
-#################squart#################squart#################squart#################squart#################squart#################squart##########
-#################squart#################squart#################squart#################squart#################squart#################squart##########
-#################squart#################squart#################squart#################squart#################squart#################squart##########
+
+
+################squart#################squart#################squart#################squart#################squart
+
+
 print("Input Age, gender, height and weight")
+
+
 ########################
-def elvisugly():
-    print("Elive Ugly")
+def original():
+    subprocess.call(["python", "original interface.py"])
 
 
 age_lb = Label(frame, text="Enter Age (2 - 120)")
@@ -1061,14 +1029,8 @@ label.grid(row=9, column=2, pady=20)
 
 root.mainloop()
 
-
 from tkinter import *
 from tkinter import messagebox
-
-try:
-    import Tkinter as tk
-except:
-    import tkinter as tk
 
 choose = Tk()
 choose.configure(bg="purple")
@@ -1080,18 +1042,17 @@ var = IntVar()
 chooseme = Frame(choose, padx=10, pady=10, bg="orange")
 chooseme.pack(expand=True)
 
-
-squart_btn = Button(chooseme, text="Squart",command = square)
+squart_btn = Button(chooseme, text="Squart", command=square)
 squart_btn.grid(row=1, column=1)
-situp_btn = Button(chooseme, text="Sit up", command =situpcmd)
+situp_btn = Button(chooseme, text="Sit up", command=situpcmd)
 situp_btn.grid(row=2, column=1)
-pushup_btn = Button(chooseme, text="Push up",command  = pup)
+pushup_btn = Button(chooseme, text="Push up", command=pup)
 pushup_btn.grid(row=3, column=1)
-aling_btn = Button(chooseme, text="Dumbbell",command=Alin)
+aling_btn = Button(chooseme, text="Dumbbell", command=Alin)
 aling_btn.grid(row=4, column=1)
 others_btn = Button(chooseme, text="Others move", command=nomove)
 others_btn.grid(row=5, column=1)
-continue_btn = Button(chooseme, text='quit', command=elvisugly)
+continue_btn = Button(chooseme, text='quit', command=original)
 continue_btn.grid(row=6, column=1)
 
 chooseme.mainloop()
