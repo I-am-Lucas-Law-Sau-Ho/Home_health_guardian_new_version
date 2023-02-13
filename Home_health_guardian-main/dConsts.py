@@ -11,7 +11,7 @@ MAIN_WINDOW_COLOR = "#bedddc"
 MAIN_FRAME_COLOR = "#f4efeb"
 GOOD_FOOD_COLOR = "#9be281"
 BAD_FOOD_COLOR = "#f9a08b"
-BTN_COLOR = "#e5c5c8"
+BTN_COLOR = "#e5c5c8" 
 
 # Guidelines Category
 # => Daily Intake Content
@@ -23,7 +23,7 @@ DAILY_NUTR_RIGHT = [
     "2000-2500mg per day",
     "1000-1400mg per day",
     "500ml + residual excretion/24h",
-]
+] 
 
 # => Recommended Foods List
 GOOD_LIST_LEFT = [
